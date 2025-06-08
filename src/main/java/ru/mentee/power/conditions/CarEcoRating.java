@@ -45,6 +45,7 @@ public class CarEcoRating {
             return ERROR_CODE;
         }
         int finalRating = applyRatingModifiers(baseRating, fuelType, engineVolume, fuelConsumption, yearOfManufacture, isEuroCompliant);
+
         return clampRating(finalRating);
     }
 
@@ -100,14 +101,15 @@ public class CarEcoRating {
                                      boolean isEuroCompliant) {
         // TODO: Реализуйте метод применения модификаторов
         double rating = baseRating;
-        if (fuelType.equals("Бензин") || fuelType.equals("Дизель")) {
+        if (fuelType.equals("Бензин") || fuelType.equals("Дизель") || fuelType.equals("Гибрид")) {
             rating -= engineVolume * 5;
             rating -= fuelConsumption * 2;
             if (isEuroCompliant) rating += 10;
-        } else if (fuelType.equals("Гибрид")) {
-            if (fuelConsumption < 5) rating += 15;
         } else if (fuelType.equals("Электро")) {
             rating -= fuelConsumption * 0.5;
+        }
+        if (fuelType.equals("Гибрид")) {
+            if (fuelConsumption < 5) rating += 15;
         }
         int agePenalty = Math.max(0, yearOfManufacture < EURO_STANDARD_YEAR_THRESHOLD ? EURO_STANDARD_YEAR_THRESHOLD - yearOfManufacture : 0);
         rating -= agePenalty;

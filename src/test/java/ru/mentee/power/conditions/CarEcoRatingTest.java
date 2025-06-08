@@ -38,7 +38,7 @@ class CarEcoRatingTest {
         // TODO: Исправьте ошибку в ожидаемом рейтинге!
         // Базовый рейтинг 90, штраф за расход 15*0.5=7.5, штраф за год 0.
         // Итого = 90 - 7.5 = 82.5 -> 83 (округление)
-        int expectedRating = 72; // В этой строке ошибка!
+        int expectedRating = 83; // В этой строке ошибка!
         assertThat(rating).isEqualTo(expectedRating);
     }
 
@@ -60,7 +60,7 @@ class CarEcoRatingTest {
         // TODO: Исправьте ошибку в ожидаемом рейтинге!
         // База 70. Объем -7.5. Расход -8. Год 2021 (>2020) -0. Евро-6 +10. Расход<5 +15.
         // Итого = 70 - 7.5 - 8 + 10 + 15 = 79.5 -> 80 (округление)
-        int expectedRating = 65; // В этой строке ошибка!
+        int expectedRating = 80; // В этой строке ошибка!
         assertThat(rating).isEqualTo(expectedRating);
     }
 
@@ -82,7 +82,7 @@ class CarEcoRatingTest {
         // TODO: Исправьте ошибку в ожидаемом рейтинге!
         // База 40. Объем -12.5. Расход -16. Год (2020-2015=5) -5. Евро нет.
         // Итого = 40 - 12.5 - 16 - 5 = 6.5 -> 7 (округление)
-        assertThat(rating).isEqualTo(10); // В этой строке ошибка!
+        assertThat(rating).isEqualTo(7); // В этой строке ошибка!
     }
 
     @Test
@@ -102,7 +102,7 @@ class CarEcoRatingTest {
         // Assert
         // TODO: Исправьте ошибку в проверке рейтинга!
         // Мы должны убедиться, что рейтинг не превышает максимально допустимый (100)
-        assertThat(rating).isGreaterThan(MAX_RATING); // В этой строке ошибка!
+        assertThat(rating).isLessThan(MAX_RATING); // В этой строке ошибка!
     }
 
     @Test
@@ -123,7 +123,7 @@ class CarEcoRatingTest {
         // TODO: Исправьте ошибку в ожидаемом рейтинге!
         // База 30. Объем -35. Расход -50. Год (2020-1980=40) -40. Евро нет.
         // Итого = 30 - 35 - 50 - 40 = -95. Должен быть ограничен до MIN_RATING (1).
-        assertThat(rating).isEqualTo(0); // В этой строке ошибка!
+        assertThat(rating).isEqualTo(MIN_RATING); // В этой строке ошибка!
     }
 
     @Test
@@ -143,7 +143,7 @@ class CarEcoRatingTest {
         // Assert
         // TODO: Исправьте ошибку в ожидаемом результате!
         // При неизвестном типе топлива метод должен возвращать код ошибки
-        assertThat(rating).isEqualTo(20); // В этой строке ошибка!
+        assertThat(rating).isEqualTo(ERROR); // В этой строке ошибка!
     }
 
     @Test
@@ -181,7 +181,7 @@ class CarEcoRatingTest {
         // Assert
         // TODO: Исправьте ошибку в ожидаемом результате!
         // При отрицательном расходе топлива метод должен возвращать код ошибки
-        assertThat(rating).isEqualTo(50); // В этой строке ошибка!
+        assertThat(rating).isEqualTo(ERROR); // В этой строке ошибка!
     }
 
     @Test
