@@ -1,4 +1,4 @@
-package variables;
+package ru.mentee.power.variables;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;

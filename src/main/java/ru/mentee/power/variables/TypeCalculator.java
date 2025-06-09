@@ -1,4 +1,4 @@
-package variables;
+package ru.mentee.power.variables;
 
 public class TypeCalculator {
     public static void main(String[] args) {
