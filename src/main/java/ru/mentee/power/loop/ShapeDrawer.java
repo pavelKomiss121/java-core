@@ -148,6 +148,6 @@ public class ShapeDrawer {
         drawer.printShape(drawer.drawTriangle(5));
 
         System.out.println("\nРомб размером 5:");
-        drawer.printShape(drawer.drawRhombus(3));
+        drawer.printShape(drawer.drawRhombus(5));
     }
 }
