@@ -226,28 +226,4 @@ class RockPaperScissorsTest {
         assertThat(result).isEqualTo("Неверный выбор игрока."); // В этой строке ошибка!
     }
 
-    // Бонус: Используйте моки для подмены generateComputerChoice
-    // Для этого нужно добавить зависимость Mockito в build.gradle:
-    // testImplementation 'org.mockito:mockito-core:5.+'
-    // testImplementation 'org.mockito:mockito-junit-jupiter:5.+'
-    // И использовать @ExtendWith(MockitoExtension.class) над классом теста
-    /*
-    @Test
-    @DisplayName("Тестирование метода playGame с моком для generateComputerChoice")
-    void testPlayGame_WithMock() {
-        // Arrange
-        RockPaperScissors mockedGame = Mockito.spy(new RockPaperScissors()); // Создаем spy
-        String playerChoice = ROCK;
-        String forcedComputerChoice = PAPER; // Заставим компьютер выбрать Бумагу
-        Mockito.doReturn(forcedComputerChoice).when(mockedGame).generateComputerMove();
-
-        // Act
-        String result = mockedGame.playOneGame();
-
-        // Assert
-        assertThat(result).isEqualTo(String.format("Компьютер выбрал: %s. Результат: %s",
-                                     forcedComputerChoice, COMPUTER_WINS));
-        Mockito.verify(mockedGame, Mockito.times(1)).generateComputerMove(); // Убедимся, что метод был вызван
-    }
-    */
 }

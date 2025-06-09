@@ -35,7 +35,7 @@ public class RockPaperScissors {
         // TODO: Реализуйте определение победителя
         playerMove = playerMove.toLowerCase();
         computerMove = computerMove.toLowerCase();
-        // 1. Проверьте валидность ходов через validateMove
+
         if (!validateMove(playerMove) || !validateMove(computerMove)) {
             return ERROR;
         }
@@ -43,11 +43,7 @@ public class RockPaperScissors {
         if (playerMove.equals(computerMove)) {
             return DRAW;
         }
-        // 3. Используйте вложенные условия или switch для определения победителя
-        // Правила:
-        // - Камень бьет ножницы
-        // - Ножницы бьют бумагу
-        // - Бумага бьет камень
+
         switch (playerMove) {
             case ROCK:
                 return (computerMove.equals(SCISSORS)) ? WIN : LOSE;
