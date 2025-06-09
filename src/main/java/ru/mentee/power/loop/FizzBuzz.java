@@ -51,7 +51,7 @@ public class FizzBuzz {
         FizzBuzz fizzBuzz = new FizzBuzz();
 
         // Выводим результаты для n = 15
-        System.out.println("FizzBuzz для чисел от 1 до 15:");
-        fizzBuzz.printFizzBuzz(15);
+        System.out.println("FizzBuzz для чисел от 1 до 30:");
+        fizzBuzz.printFizzBuzz(30);
     }
 }
