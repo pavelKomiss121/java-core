@@ -1,4 +1,4 @@
-package conditions;
+package ru.mentee.power.conditions;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
