@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SmartThermostatTest {
@@ -210,5 +214,22 @@ class SmartThermostatTest {
                                                     double expectedTemp) {
         double targetTemp = thermostat.getTargetTemperature(timeOfDay, dayOfWeek, isOccupied, outsideTemp);
         assertThat(targetTemp).isEqualTo(expectedTemp);
+    }
+
+    @Test
+    @DisplayName("Дополнительные тесты")
+    void extraTest() {
+        // Arrange
+        List<Integer> timeOfDay = Arrays.asList(7, 7, 15, 15, 23);
+        List<String> dayOfWeek = Arrays.asList("Пятница", "Пятница", "Пятница", "Пятница", "Суббота");
+        List<Boolean> isOccupied = Arrays.asList(true, false, true, true, true);
+        List<Double> outsideTemp = Arrays.asList(16.0, 16.0, 16.0, 30.0, -10.0);
+
+        List<Double> expectedTemp = Arrays.asList(22.0, 18.0, 20.0, 21.0, 21.0);
+        for (int i =0; i<timeOfDay.toArray().length; i++){
+            double targetTemp = thermostat.getTargetTemperature(timeOfDay.get(i), dayOfWeek.get(i), isOccupied.get(i), outsideTemp.get(i));
+            assertThat(targetTemp).isEqualTo(expectedTemp.get(i));
+        }
+
     }
 }
