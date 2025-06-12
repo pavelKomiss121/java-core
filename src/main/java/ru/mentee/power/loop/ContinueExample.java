@@ -11,7 +11,7 @@ public class ContinueExample {
         for (int value : data) {
             if (value <= 0) {
                 System.out.println("Пропускаем: " + value);
-                continue; // Переходим к следующему числу, если текущее не положительное
+                continue;
             }
             System.out.println("Добавляем: " + value);
             sumOfPositives += value;

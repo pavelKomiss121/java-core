@@ -7,7 +7,7 @@ public class WhileLoopExample {
         System.out.println("Подготовка к запуску:");
         while (countdown > 0) {
             System.out.println(countdown + "...");
-            countdown--; // Уменьшаем счетчик - важно для завершения цикла!
+            countdown--;
         }
         System.out.println("Старт!");
     }

@@ -3,7 +3,7 @@ package ru.mentee.power.loop;
 public class BreakExample {
     public static void main(String[] args) {
         int[] numbers = {10, 5, 0, -3, 8, -1};
-        int firstNegative = 0; // Переменная для хранения результата
+        int firstNegative = 0;
 
         System.out.println("Ищем первое отрицательное число...");
         for (int number : numbers) {
@@ -11,11 +11,11 @@ public class BreakExample {
             if (number < 0) {
                 firstNegative = number;
                 System.out.println("Нашли! Это " + number);
-                break; // Выходим из цикла, как только нашли
+                break;
             }
         }
 
-        if (firstNegative == 0) { // Проверяем, было ли найдено
+        if (firstNegative == 0) {
             System.out.println("Отрицательных чисел не найдено.");
         } else {
             System.out.println("Первое найденное отрицательное: " + firstNegative);

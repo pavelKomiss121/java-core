@@ -5,7 +5,6 @@ public class ForEachLoopExample {
         String[] fruits = {"Яблоко", "Банан", "Апельсин"};
 
         System.out.println("Фрукты (без индекса):");
-        // Перебираем массив с помощью for-each
         for (String fruit : fruits) {
             System.out.println(fruit);
         }
