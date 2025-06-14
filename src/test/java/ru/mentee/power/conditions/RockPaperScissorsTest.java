@@ -189,41 +189,4 @@ class RockPaperScissorsTest {
         String result = game.determineWinner(playerChoice, computerChoice);
         assertThat(result).isEqualTo(expectedResult);
     }
-
-/*    @Test
-    @DisplayName("Тестирование метода playGame (без моков)")
-    void testPlayGame_ValidChoice() {
-        // Arrange
-        String playerChoice = ROCK;
-
-        // Act
-        String result = game.playOneGame();
-
-        // Assert
-        // TODO: Исправьте ошибку в проверке результата!
-        // Результат должен содержать информацию о выборе компьютера
-        assertThat(result).contains("Компьютер:");  // В этой строке ошибка!
-        assertThat(result).containsAnyOf(PLAYER_WINS, COMPUTER_WINS, DRAW);
-
-        // Проверяем, что выбор компьютера был корректным
-        if (result.contains(ROCK)) assertThat(game.determineWinner(playerChoice, ROCK)).isEqualTo(DRAW);
-        if (result.contains(PAPER)) assertThat(game.determineWinner(playerChoice, PAPER)).isEqualTo(COMPUTER_WINS);
-        if (result.contains(SCISSORS)) assertThat(game.determineWinner(playerChoice, SCISSORS)).isEqualTo(PLAYER_WINS);
-    }
-
-    @Test
-    @DisplayName("Тестирование метода playGame с неверным выбором")
-    void testPlayGame_InvalidChoice() {
-        // Arrange
-        String playerChoice = "Ящерица";
-
-        // Act
-        String result = game.playOneGame();
-
-        // Assert
-        // TODO: Исправьте ошибку в ожидаемом сообщении!
-        // При некорректном выборе игрока должно выводиться сообщение об ошибке
-        assertThat(result).isEqualTo("Неверный выбор игрока."); // В этой строке ошибка!
-    }*/
-
 }
