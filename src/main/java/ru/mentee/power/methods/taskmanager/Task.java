@@ -24,57 +24,69 @@ public class Task {
      * Конструктор с полным набором параметров
      */
     public Task(int id, String title, String description, Date dueDate, Priority priority) {
-        // TODO: Реализовать конструктор
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.priority = priority;
+
     }
 
     /**
      * Конструктор с минимальным набором параметров (перегрузка)
      */
     public Task(int id, String title) {
-        // TODO: Реализовать конструктор с установкой значений по умолчанию
+        this.title = title;
+        this.id = id;
     }
+
 
     /**
      * Конструктор с частичным набором параметров (перегрузка)
      */
     public Task(int id, String title, String description) {
-        // TODO: Реализовать конструктор с установкой значений по умолчанию
+        this.id = id;
+        this.title = title;
+        this.description = description;
     }
 
-    // TODO: Реализовать геттеры и сеттеры для всех полей
-
-    /**
-     * Метод для получения ID задачи
-     */
     public int getId() {
-        // TODO: Реализовать метод
-        return 0;
+        return id;
     }
 
-    /**
-     * Метод для получения названия задачи
-     */
     public String getTitle() {
-        // TODO: Реализовать метод
-        return null;
+        return title;
     }
 
-    // TODO: Реализовать остальные геттеры и сеттеры
+    public String getDescription() {
+        return description;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
 
     /**
      * Метод для маркировки задачи как выполненной
      */
     public void markAsCompleted() {
-        // TODO: Реализовать метод
+        completed = true;
     }
 
     /**
      * Метод для проверки, просрочена ли задача
      */
     public boolean isOverdue() {
-        // TODO: Сравнить текущую дату с датой выполнения
-        // Если дата выполнения раньше текущей, задача просрочена
-        return false;
+        if (dueDate == null) return false;
+        return dueDate.before(new Date());
     }
 
     /**
@@ -82,7 +94,15 @@ public class Task {
      */
     @Override
     public String toString() {
-        // TODO: Реализовать метод
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Задача #").append(id).append("\n");
+        sb.append("Название: ").append(title).append("\n");
+        if (description != null && !description.isEmpty()) {
+            sb.append("Описание: ").append(description).append("\n");
+        }
+        if (dueDate != null) sb.append("Срок: ").append(dueDate).append("\n");
+        if (priority != null) sb.append("Приоритет: ").append(priority).append("\n");
+        sb.append("Статус: ").append(completed ? "выполнена" : "не выполнена");
+        return sb.toString();
     }
 }
