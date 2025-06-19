@@ -51,7 +51,7 @@ public class DataFormatterTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = sdf.parse("2023-01-15");
 
-        assertEquals("15 January 2023", DataFormatter.format(date, "dd MMMM yyyy"));
+        assertEquals("15 января 2023", DataFormatter.format(date, "dd MMMM yyyy"));
         assertEquals("2023/01/15", DataFormatter.format(date, "yyyy/MM/dd"));
     }
 
@@ -72,5 +72,31 @@ public class DataFormatterTest {
 
         List<String> empty = Arrays.asList();
         assertEquals("", DataFormatter.format(empty, ";"));
+    }
+
+    @Test
+    public void testFormatNullList() {
+        assertEquals("", DataFormatter.format((List<String>) null));
+    }
+
+    @Test
+    public void testFormatNullListWithDelimiter() {
+        assertEquals("", DataFormatter.format((List<String>) null, ", "));
+    }
+
+    @Test
+    public void testFormatNullDate() {
+        assertEquals("", DataFormatter.format((Date) null));
+    }
+
+    @Test
+    public void testFormatNullDateWithPattern() {
+        assertEquals("", DataFormatter.format((Date) null, "dd.MM.yyyy"));
+    }
+
+    @Test
+    public void testFormatDateWithNullPattern() {
+        Date date = new Date();
+        assertEquals("", DataFormatter.format(date, null));  // если так реализуешь
     }
 }
