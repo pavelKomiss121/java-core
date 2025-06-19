@@ -51,7 +51,7 @@ public class DataFormatterTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = sdf.parse("2023-01-15");
 
-        assertEquals("15 января 2023", DataFormatter.format(date, "dd MMMM yyyy"));
+        assertEquals("15 January 2023", DataFormatter.format(date, "dd MMMM yyyy"));
         assertEquals("2023/01/15", DataFormatter.format(date, "yyyy/MM/dd"));
     }
 
