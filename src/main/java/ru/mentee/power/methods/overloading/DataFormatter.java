@@ -120,7 +120,8 @@ public class DataFormatter {
      */
     public static String format(Date date, String pattern) {
         if (date == null ) return "";
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.ENGLISH);
+        if (pattern == null ) pattern = "";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(date);
     }
 
@@ -131,7 +132,7 @@ public class DataFormatter {
      * @return Объединенная строка
      */
     public static String format(List<String> items) {
-        if (items.size() == 0) return "";
+        if (items == null || items.isEmpty()) return "";
         String result = "";
         for (int i=0; i<items.size()-1; i++){
             result += items.get(i) + ", ";
@@ -148,7 +149,8 @@ public class DataFormatter {
      * @return Объединенная строка
      */
     public static String format(List<String> items, String delimiter) {
-        if (items.size() == 0) return "";
+        if (items == null || items.isEmpty()) return "";
+        if (delimiter == null) delimiter = "";
         String result = "";
         for (int i=0; i<items.size()-1; i++){
             result += items.get(i) + delimiter ;

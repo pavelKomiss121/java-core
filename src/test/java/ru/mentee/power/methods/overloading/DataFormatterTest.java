@@ -73,4 +73,30 @@ public class DataFormatterTest {
         List<String> empty = Arrays.asList();
         assertEquals("", DataFormatter.format(empty, ";"));
     }
+
+    @Test
+    public void testFormatNullList() {
+        assertEquals("", DataFormatter.format((List<String>) null));
+    }
+
+    @Test
+    public void testFormatNullListWithDelimiter() {
+        assertEquals("", DataFormatter.format((List<String>) null, ", "));
+    }
+
+    @Test
+    public void testFormatNullDate() {
+        assertEquals("", DataFormatter.format((Date) null));
+    }
+
+    @Test
+    public void testFormatNullDateWithPattern() {
+        assertEquals("", DataFormatter.format((Date) null, "dd.MM.yyyy"));
+    }
+
+    @Test
+    public void testFormatDateWithNullPattern() {
+        Date date = new Date();
+        assertEquals("", DataFormatter.format(date, null));  // если так реализуешь
+    }
 }
