@@ -22,8 +22,11 @@ class ConfigManagerTest {
     void setUp() {
         // TODO: Инициализировать тестовую карту конфигурации
         testConfig = new HashMap<>();
-
-        // TODO: Добавить тестовые данные в карту
+        testConfig.put("app.name", "TestApp");
+        testConfig.put("timeout", "30");
+        testConfig.put("feature.enabled", "true");
+        testConfig.put("invalid.int", "abc");
+        testConfig.put("invalid.bool", "yes");
 
         configManager = new ConfigManager(testConfig);
     }
@@ -31,48 +34,58 @@ class ConfigManagerTest {
     @Test
     @DisplayName("Должен успешно получить строковое значение по существующему ключу")
     void shouldGetStringValueWhenKeyExists() throws MissingConfigKeyException {
-        // TODO: Реализовать тест
+        String value = configManager.getRequiredValue("app.name");
+        assertThat(value).isEqualTo("TestApp");
     }
 
     @Test
     @DisplayName("Должен выбросить MissingConfigKeyException при запросе несуществующего ключа")
     void shouldThrowMissingConfigKeyExceptionWhenKeyDoesNotExist() {
-        // TODO: Реализовать тест
+        assertThatThrownBy(() -> configManager.getRequiredValue("missing.key"))
+                .isInstanceOf(MissingConfigKeyException.class);
     }
 
     @Test
     @DisplayName("Должен успешно получить целочисленное значение по существующему ключу")
     void shouldGetIntValueWhenKeyExists() throws MissingConfigKeyException, InvalidConfigValueException {
-        // TODO: Реализовать тест
+        int timeout = configManager.getRequiredIntValue("timeout");
+        assertThat(timeout).isEqualTo(30);
     }
 
     @Test
     @DisplayName("Должен выбросить InvalidConfigValueException при запросе некорректного целочисленного значения")
     void shouldThrowInvalidConfigValueExceptionWhenIntValueIsInvalid() {
-        // TODO: Реализовать тест
+        assertThatThrownBy(() -> configManager.getRequiredIntValue("invalid.int"))
+                .isInstanceOf(InvalidConfigValueException.class);
     }
 
     @Test
     @DisplayName("Должен успешно получить булево значение по существующему ключу")
     void shouldGetBooleanValueWhenKeyExists() throws MissingConfigKeyException, InvalidConfigValueException {
-        // TODO: Реализовать тест
+        boolean enabled = configManager.getRequiredBooleanValue("feature.enabled");
+        assertThat(enabled).isTrue();
     }
 
     @Test
     @DisplayName("Должен выбросить InvalidConfigValueException при запросе некорректного булева значения")
     void shouldThrowInvalidConfigValueExceptionWhenBooleanValueIsInvalid() {
-        // TODO: Реализовать тест
+        assertThatThrownBy(() -> configManager.getRequiredBooleanValue("invalid.bool"))
+                .isInstanceOf(InvalidConfigValueException.class);
     }
 
     @Test
     @DisplayName("Должен успешно добавить новое значение в конфигурацию")
-    void shouldAddNewValueToConfig() {
-        // TODO: Реализовать тест
+    void shouldAddNewValueToConfig() throws MissingConfigKeyException {
+        configManager.setValue("new.key", "newValue");
+        String result = configManager.getRequiredValue("new.key");
+        assertThat(result).isEqualTo("newValue");
     }
 
     @Test
     @DisplayName("Должен успешно обновить существующее значение в конфигурации")
-    void shouldUpdateExistingValueInConfig() {
-        // TODO: Реализовать тест
+    void shouldUpdateExistingValueInConfig() throws MissingConfigKeyException {
+        configManager.setValue("timeout", "60");
+        String updated = configManager.getRequiredValue("timeout");
+        assertThat(updated).isEqualTo("60");
     }
 }
