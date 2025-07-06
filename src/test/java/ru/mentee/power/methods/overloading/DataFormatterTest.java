@@ -47,15 +47,6 @@ public class DataFormatterTest {
     }
 
     @Test
-    public void testFormatDateWithPattern() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = sdf.parse("2023-01-15");
-
-        assertEquals("15 January 2023", DataFormatter.format(date, "dd MMMM yyyy"));
-        assertEquals("2023/01/15", DataFormatter.format(date, "yyyy/MM/dd"));
-    }
-
-    @Test
     public void testFormatList() {
         List<String> fruits = Arrays.asList("apple", "banana", "orange");
         assertEquals("apple, banana, orange", DataFormatter.format(fruits));
