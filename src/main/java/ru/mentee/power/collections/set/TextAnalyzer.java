@@ -1,6 +1,7 @@
 package ru.mentee.power.collections.set;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Класс для анализа текста с использованием множеств
@@ -21,6 +22,8 @@ public class TextAnalyzer {
     public static Set<String> findUniqueWords(String text) {
         if (text == null) throw new IllegalArgumentException();
         Set<String> words = new HashSet<>();
+        if (text.isEmpty()) return words;
+
         for (String word : text.split("[\\s\\p{Punct}]+")) {
             words.add(word.toLowerCase());
         }
@@ -129,8 +132,36 @@ public class TextAnalyzer {
      * для хранения анаграмм в алфавитном порядке
      */
     public static Set<Set<String>> findAnagrams(List<String> words) {
-        // TODO: Реализуйте метод
-        return null;
+        if (words == null) throw new IllegalArgumentException();
+
+        Map<String, Set<String>> anagramGroups = new HashMap<>();
+
+        for (String word : words) {
+            if (word == null || word.isEmpty()) continue;
+
+            char[] chars = word.toLowerCase().toCharArray();
+            Arrays.sort(chars);
+            String key = new String(chars);
+
+            /*
+            Метод computeIfAbsent — это удобный способ:
+            проверить, есть ли уже значение для ключа,
+            если нет, то создать его (и положить в карту),
+            и в любом случае вернуть соответствующее значение.
+            */
+            anagramGroups
+                    .computeIfAbsent(key, k -> new TreeSet<>()) // TreeSet для сортировки
+                    .add(word);
+        }
+
+        // Собираем только группы, содержащие более одного элемента
+        Set<Set<String>> result = new HashSet<>();
+        for (Set<String> group : anagramGroups.values()) {
+            if (group.size() > 1) {
+                result.add(group);
+            }
+        }
+        return result;
     }
 
     /**
@@ -146,8 +177,8 @@ public class TextAnalyzer {
      * Рекомендуемая реализация: использование метода containsAll()
      */
     public static <T> boolean isSubset(Set<T> set1, Set<T> set2) {
-        // TODO: Реализуйте метод
-        return false;
+        if (set1 == null || set2 == null) throw new IllegalArgumentException();
+        return set2.containsAll(set1);
     }
 
     /**
@@ -163,8 +194,19 @@ public class TextAnalyzer {
      * принадлежности слова к стоп-словам
      */
     public static String removeStopWords(String text, Set<String> stopWords) {
-        // TODO: Реализуйте метод
-        return null;
+        if (text == null || stopWords == null) throw new IllegalArgumentException();
+
+        Set<String> stopSet = new HashSet<>(stopWords);
+        StringBuilder result = new StringBuilder();
+        String[] words = text.split(" ");
+
+        for (String word : words) {
+            if (!stopSet.contains(word)) {
+                if (!result.isEmpty()) result.append(" ");
+                result.append(word);
+            }
+        }
+        return result.toString();
     }
 
     /**
@@ -176,9 +218,61 @@ public class TextAnalyzer {
      * @throws IllegalArgumentException если words равен null
      */
     public static Map<String, Long> compareSetPerformance(List<String> words) {
-        // TODO: Реализуйте метод для сравнения производительности
-        // разных типов множеств (HashSet, LinkedHashSet, TreeSet)
-        // для различных операций (добавление, поиск, удаление)
-        return null;
+        if (words == null) throw new IllegalArgumentException();
+
+        Map<String, Long> results = new LinkedHashMap<>();
+
+        // HashSet
+        Set<String> hashSet = new HashSet<>();
+        long start = System.nanoTime();
+        for (String word : words) hashSet.add(word);
+        long end = System.nanoTime();
+        results.put("HashSet - add", end - start);
+
+        start = System.nanoTime();
+        for (String word : words) hashSet.contains(word);
+        end = System.nanoTime();
+        results.put("HashSet - contains", end - start);
+
+        start = System.nanoTime();
+        for (String word : words) hashSet.remove(word);
+        end = System.nanoTime();
+        results.put("HashSet - remove", end - start);
+
+        // LinkedHashSet
+        Set<String> linkedSet = new LinkedHashSet<>();
+        start = System.nanoTime();
+        for (String word : words) linkedSet.add(word);
+        end = System.nanoTime();
+        results.put("LinkedHashSet - add", end - start);
+
+        start = System.nanoTime();
+        for (String word : words) linkedSet.contains(word);
+        end = System.nanoTime();
+        results.put("LinkedHashSet - contains", end - start);
+
+        start = System.nanoTime();
+        for (String word : words) linkedSet.remove(word);
+        end = System.nanoTime();
+        results.put("LinkedHashSet - remove", end - start);
+
+        // TreeSet
+        Set<String> treeSet = new TreeSet<>();
+        start = System.nanoTime();
+        for (String word : words) treeSet.add(word);
+        end = System.nanoTime();
+        results.put("TreeSet - add", end - start);
+
+        start = System.nanoTime();
+        for (String word : words) treeSet.contains(word);
+        end = System.nanoTime();
+        results.put("TreeSet - contains", end - start);
+
+        start = System.nanoTime();
+        for (String word : words) treeSet.remove(word);
+        end = System.nanoTime();
+        results.put("TreeSet - remove", end - start);
+
+        return results;
     }
 }
