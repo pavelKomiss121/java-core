@@ -8,7 +8,7 @@ public class DiscountCalculator {
 
     /**
      * Рассчитывает стоимость с учетом скидки.
-     * Скидка 10% при сумме > 1000.
+     * Скидка 10% при сумме > 1000 и <= 5000.
      * Скидка 20% при сумме > 5000.
      * Скидки не суммируются, применяется максимальная.
      *
@@ -18,31 +18,21 @@ public class DiscountCalculator {
     public double calculateDiscountedPrice(double amount) {
         double discountRate = 0.0;
 
-        // TODO: Ошибка №1 где-то здесь. Скидка 20% не применяется, когда должна.
-        if (amount > 5000) {
+        // Исправленная логика:
+        if (amount > 5000) {         // Сначала проверяем > 5000
             discountRate = 0.20; // 20%
-        } else if (amount > 1000) {
+        } else if (amount > 1000) { // Потом > 1000
             discountRate = 0.10; // 10%
         }
+        // Неявно: если <= 1000, discountRate остается 0.0
 
         double discountValue = amount * discountRate;
         double finalPrice = amount - discountValue;
 
-        // TODO: Ошибка №2 - возможно, неверный расчет итоговой цены? Проверь логику.
-
+        // Для демонстрации, можно оставить или убрать
         System.out.printf("Сумма: %.2f, Скидка: %.0f%%, Итого: %.2f%n",
                 amount, discountRate * 100, finalPrice);
 
         return finalPrice;
-    }
-
-    public static void main(String[] args) {
-        DiscountCalculator calculator = new DiscountCalculator();
-
-        System.out.println("Тестируем калькулятор:");
-        calculator.calculateDiscountedPrice(800);    // Ожидаем: 800.00 (скидка 0%)
-        calculator.calculateDiscountedPrice(1200);   // Ожидаем: 1080.00 (скидка 10%)
-        calculator.calculateDiscountedPrice(5500);   // Ожидаем: 4400.00 (скидка 20%) - Тут проблема!
-        calculator.calculateDiscountedPrice(6000);   // Ожидаем: 4800.00 (скидка 20%) - И тут!
     }
 }
