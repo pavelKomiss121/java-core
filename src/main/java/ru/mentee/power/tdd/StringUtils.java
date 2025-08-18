@@ -11,14 +11,16 @@ public class StringUtils {
      * @param str Строка для переворота.
      * @return Перевернутая строка, или null если на входе был null.
      */
+
     public String reverse(String str) {
-        // TODO: Реализуй этот метод, следуя циклу TDD.
-        // Сначала напиши код, чтобы прошел тест shouldReverseNormalString.
-        // Затем добавь обработку пустой строки и null, чтобы прошли остальные тесты.
-        // Подумай о рефакторинге, если это возможно.
         if (str == null) {
             return null;
         }
-        return new StringBuilder(str).reverse().toString(); // Пример возможной реализации
+        StringBuilder sb = new StringBuilder();
+        for (int i = str.length() - 1; i >= 0; i--) {
+            char temp = str.charAt(i);
+            sb.append(temp);
+        }
+        return sb.toString(); // Пример возможной реализации
     }
 }
