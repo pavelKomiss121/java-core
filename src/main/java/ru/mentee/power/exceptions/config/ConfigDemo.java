@@ -1,50 +1,48 @@
 package ru.mentee.power.exceptions.config;
 
-import ru.mentee.power.exceptions.config.exception.ConfigException;
-import ru.mentee.power.exceptions.config.exception.MissingConfigKeyException;
-import ru.mentee.power.exceptions.config.exception.InvalidConfigValueException;
-
 import java.util.HashMap;
 import java.util.Map;
+import ru.mentee.power.exceptions.config.exception.ConfigException;
 
 /**
  * Демонстрация работы ConfigManager.
  */
 public class ConfigDemo {
-    public static void main(String[] args) {
-        // TODO: Создать тестовую карту конфигурации
-        Map<String, String> config = new HashMap<>();
 
-        // ✅ Добавление тестовых данных
-        config.put("app.name", "TestApp");
-        config.put("max.users", "50");
-        config.put("feature.enabled", "true");
-        config.put("timeout", "ten");
+  public static void main(String[] args) {
+    // TODO: Создать тестовую карту конфигурации
+    Map<String, String> config = new HashMap<>();
 
-        ConfigManager manager = new ConfigManager(config);
+    // ✅ Добавление тестовых данных
+    config.put("app.name", "TestApp");
+    config.put("max.users", "50");
+    config.put("feature.enabled", "true");
+    config.put("timeout", "ten");
 
-        try {
-            // TODO: Получить строковое значение
-            String appName = manager.getRequiredValue("app.name");
-            System.out.println("App Name: " + appName);
+    ConfigManager manager = new ConfigManager(config);
 
-            // TODO: Получить числовое значение
-            int maxUsers = manager.getRequiredIntValue("max.users");
-            System.out.println("Max Users: " + maxUsers);
+    try {
+      // TODO: Получить строковое значение
+      String appName = manager.getRequiredValue("app.name");
+      System.out.println("App Name: " + appName);
 
-            // TODO: Получить булево значение
-            boolean isFeatureEnabled = manager.getRequiredBooleanValue("feature.enabled");
-            System.out.println("Feature Enabled: " + isFeatureEnabled);
+      // TODO: Получить числовое значение
+      int maxUsers = manager.getRequiredIntValue("max.users");
+      System.out.println("Max Users: " + maxUsers);
 
-            // TODO: Попытаться получить несуществующий ключ
-            manager.getRequiredValue("missing.key");
+      // TODO: Получить булево значение
+      boolean isFeatureEnabled = manager.getRequiredBooleanValue("feature.enabled");
+      System.out.println("Feature Enabled: " + isFeatureEnabled);
 
-            // TODO: Попытаться получить некорректное числовое значение
-            int timeout = manager.getRequiredIntValue("timeout");
-            System.out.println("Timeout: " + timeout);
+      // TODO: Попытаться получить несуществующий ключ
+      manager.getRequiredValue("missing.key");
 
-        } catch (ConfigException e) {
-            System.err.println("Ошибка: " + e.getMessage());
-        }
+      // TODO: Попытаться получить некорректное числовое значение
+      int timeout = manager.getRequiredIntValue("timeout");
+      System.out.println("Timeout: " + timeout);
+
+    } catch (ConfigException e) {
+      System.err.println("Ошибка: " + e.getMessage());
     }
+  }
 }

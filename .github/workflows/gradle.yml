@@ -1,16 +1,16 @@
 name: Java CI with Gradle  # Название вашего workflow
 
-on:  # Определяет, когда будет запускаться workflow
+on: # Определяет, когда будет запускаться workflow
   push:
     branches: [ main, feature/* ]  # При push в ветку main или любую feature-ветку
   pull_request:
     branches: [ main ]  # При создании PR в main
 
-jobs:  # Задачи, которые будут выполняться
-  build:  # Название задачи
+jobs: # Задачи, которые будут выполняться
+  build: # Название задачи
     runs-on: ubuntu-latest  # На какой ОС будет выполняться (исправил alpine на ubuntu)
 
-    steps:  # Шаги выполнения
+    steps: # Шаги выполнения
       - uses: actions/checkout@v3  # Клонирование репозитория
 
       - name: Set up JDK 21  # Установка Java 21

@@ -6,65 +6,65 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 public class LibraryService {
 
-    private final List<Book> books = new ArrayList<>();
-    private final String csvFilePath; // Путь к файлу CSV
-    private static final String CSV_DELIMITER = ";"; // Разделитель
+  private static final String CSV_DELIMITER = ";"; // Разделитель
+  private final List<Book> books = new ArrayList<>();
+  private final String csvFilePath; // Путь к файлу CSV
 
-    // Конструктор по умолчанию (может быть не нужен, если всегда работаем с файлом)
-    public LibraryService() {
-        this.csvFilePath = null; // Или "default_library.csv"
+  // Конструктор по умолчанию (может быть не нужен, если всегда работаем с файлом)
+  public LibraryService() {
+    this.csvFilePath = null; // Или "default_library.csv"
+  }
+
+  // Конструктор для работы с конкретным файлом
+  public LibraryService(String csvFilePath) {
+    this.csvFilePath = csvFilePath;
+    // TODO: Возможно, здесь стоит вызвать loadFromCsv()?
+  }
+
+  public void addBook(Book book) {
+    if (book != null) {
+      this.books.add(book);
     }
+  }
 
-    // Конструктор для работы с конкретным файлом
-    public LibraryService(String csvFilePath) {
-        this.csvFilePath = csvFilePath;
-        // TODO: Возможно, здесь стоит вызвать loadFromCsv()?
+  public List<Book> getAllBooks() {
+    return Collections.unmodifiableList(this.books);
+  }
+
+  // Минимальная реализация сохранения в CSV
+  public void saveToCsv() throws IOException {
+    if (csvFilePath == null) {
+      throw new IllegalStateException("Путь к файлу CSV не задан");
     }
-
-    public void addBook(Book book) {
-        if (book != null) {
-            this.books.add(book);
-        }
+    Path path = Paths.get(csvFilePath);
+    try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+      for (Book book : books) {
+        writer.write(book.toCsvString(CSV_DELIMITER));
+        writer.newLine();
+      }
     }
+    // Ошибки IOException пробрасываются выше
+  }
 
-    public List<Book> getAllBooks() {
-        return Collections.unmodifiableList(this.books);
+  public void saveToCsv(String filePath) throws IOException {
+    if (filePath == null || filePath.isBlank()) {
+      throw new IllegalArgumentException("Путь к файлу не может быть пустым");
     }
-
-    // Минимальная реализация сохранения в CSV
-    public void saveToCsv() throws IOException {
-        if (csvFilePath == null) {
-            throw new IllegalStateException("Путь к файлу CSV не задан");
-        }
-        Path path = Paths.get(csvFilePath);
-        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-            for (Book book : books) {
-                writer.write(book.toCsvString(CSV_DELIMITER));
-                writer.newLine();
-            }
-        }
-        // Ошибки IOException пробрасываются выше
+    Path path = Paths.get(filePath);
+    try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+      for (Book book : books) {
+        writer.write(book.toCsvString(CSV_DELIMITER));
+        writer.newLine();
+      }
     }
+  }
 
-    public void saveToCsv(String filePath) throws IOException {
-        if (filePath == null || filePath.isBlank()) {
-            throw new IllegalArgumentException("Путь к файлу не может быть пустым");
-        }
-        Path path = Paths.get(filePath);
-        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-            for (Book book : books) {
-                writer.write(book.toCsvString(CSV_DELIMITER));
-                writer.newLine();
-            }
-        }
-    }
-
-    // TODO: Реализовать метод loadFromCsv()
-    // TODO: Реализовать метод loadFromCsv(String filePath)
-    // public void loadFromCsv(String filePath) throws IOException { ... }
+  // TODO: Реализовать метод loadFromCsv()
+  // TODO: Реализовать метод loadFromCsv(String filePath)
+  // public void loadFromCsv(String filePath) throws IOException { ... }
 }
