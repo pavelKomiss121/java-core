@@ -1,172 +1,205 @@
 package ru.mentee.power.tdd.notes;
 
-import javax.swing.text.html.HTML;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class NoteService {
 
-    // TODO: Выбрать коллекцию для хранения заметок (например, Map<Integer, Note>)
-    private final Map<Integer, Note> notes = new HashMap<>();
+  // TODO: Выбрать коллекцию для хранения заметок (например, Map<Integer, Note>)
+  private final Map<Integer, Note> notes = new HashMap<>();
 
-    // TODO: Добавить счетчик для генерации уникальных ID (AtomicInteger или просто int)
-    private final AtomicInteger nextId = new AtomicInteger(1);
+  // TODO: Добавить счетчик для генерации уникальных ID (AtomicInteger или просто int)
+  private final AtomicInteger nextId = new AtomicInteger(1);
 
-    // TODO: (Опционально) Поле для хранения пути к файлу сохранения
-    // private final String storageFilePath;
+  // TODO: (Опционально) Поле для хранения пути к файлу сохранения
+  // private final String storageFilePath;
 
-    // TODO: Реализовать конструктор
-    // Может принимать путь к файлу для загрузки (опционально)
-    public NoteService(/* String storageFilePath */) {
-        // this.storageFilePath = storageFilePath;
-        // TODO: (Опционально) Вызвать метод загрузки из файла, если путь указан
-        // loadFromFile();
+  // TODO: Реализовать конструктор
+  // Может принимать путь к файлу для загрузки (опционально)
+  public NoteService(/* String storageFilePath */) {
+    // this.storageFilePath = storageFilePath;
+    // TODO: (Опционально) Вызвать метод загрузки из файла, если путь указан
+    // loadFromFile();
+  }
+
+  // --- МЕТОДЫ ДЛЯ РЕАЛИЗАЦИИ ЧЕРЕЗ TDD --- //
+
+  /**
+   * Добавляет новую заметку.
+   *
+   * @param title Заголовок.
+   * @param text  Текст.
+   * @param tags  Набор тегов (может быть null).
+   * @return Созданная заметка с присвоенным ID.
+   */
+  public Note addNote(String title, String text, Set<String> tags) {
+    int id = nextId.getAndIncrement();
+    Note note = new Note(id, title, text);
+    if (tags != null) {
+      for (String tag : tags) {
+        note.addTag(tag);
+      }
+
     }
+    notes.put(id, note);
+    return note;
+  }
 
-    // --- МЕТОДЫ ДЛЯ РЕАЛИЗАЦИИ ЧЕРЕЗ TDD --- //
+  /**
+   * Получает заметку по ID.
+   *
+   * @param id ID заметки.
+   * @return Optional с заметкой, если найдена, иначе Optional.empty().
+   */
+  public Optional<Note> getNoteById(int id) {
+    return Optional.ofNullable(notes.get(id));
+  }
 
-    /**
-     * Добавляет новую заметку.
-     * @param title Заголовок.
-     * @param text Текст.
-     * @param tags Набор тегов (может быть null).
-     * @return Созданная заметка с присвоенным ID.
-     */
-    public Note addNote(String title, String text, Set<String> tags) {
-        int id = nextId.getAndIncrement();
-        Note note = new Note(id, title, text);
-        if (tags != null) {
-            for (String tag : tags) note.addTag(tag);
+  /**
+   * Получает все заметки.
+   *
+   * @return Неизменяемый список всех заметок.
+   */
+  public List<Note> getAllNotes() {
+    // TODO: Написать тест -> Реализовать метод
+    List<Note> notesList = new ArrayList<>(notes.values());
+    return Collections.unmodifiableList(notesList);
+  }
 
-        }
-        notes.put(id, note);
-        return note;
+  /**
+   * Обновляет заголовок и текст существующей заметки.
+   *
+   * @param id       ID заметки.
+   * @param newTitle Новый заголовок.
+   * @param newText  Новый текст.
+   * @return true, если заметка найдена и обновлена, иначе false.
+   */
+  public boolean updateNoteText(int id, String newTitle, String newText) {
+    // TODO: Написать тест -> Реализовать метод
+    Note note = notes.get(id);
+    if (note == null) {
+      return false;
     }
+    note.setTitle(newTitle);
+    note.setText(newText);
+    return true; // Placeholder
+  }
 
-    /**
-     * Получает заметку по ID.
-     * @param id ID заметки.
-     * @return Optional с заметкой, если найдена, иначе Optional.empty().
-     */
-    public Optional<Note> getNoteById(int id) {
-        return Optional.ofNullable(notes.get(id));
+  /**
+   * Добавляет тег к существующей заметке.
+   *
+   * @param id  ID заметки.
+   * @param tag Тег для добавления.
+   * @return true, если заметка найдена и тег добавлен, иначе false.
+   */
+  public boolean addTagToNote(int id, String tag) {
+    Note note = notes.get(id);
+    if (note == null) {
+      return false;
     }
+    if (note.getTags().contains(tag.toLowerCase())) {
+      return false;
+    }
+    note.addTag(tag.toLowerCase());
+    return true;
+  }
 
-    /**
-     * Получает все заметки.
-     * @return Неизменяемый список всех заметок.
-     */
-    public List<Note> getAllNotes() {
-        // TODO: Написать тест -> Реализовать метод
-        List<Note> notesList = new ArrayList<>(notes.values());
-        return Collections.unmodifiableList(notesList);
+  /**
+   * Удаляет тег у существующей заметки.
+   *
+   * @param id  ID заметки.
+   * @param tag Тег для удаления.
+   * @return true, если заметка найдена и тег удален, иначе false.
+   */
+  public boolean removeTagFromNote(int id, String tag) {
+    Note note = notes.get(id);
+    if (note == null) {
+      return false;
     }
+    if (!note.getTags().contains(tag.toLowerCase())) {
+      return false;
+    }
+    note.removeTag(tag);
+    return true;
+  }
 
-    /**
-     * Обновляет заголовок и текст существующей заметки.
-     * @param id ID заметки.
-     * @param newTitle Новый заголовок.
-     * @param newText Новый текст.
-     * @return true, если заметка найдена и обновлена, иначе false.
-     */
-    public boolean updateNoteText(int id, String newTitle, String newText) {
-        // TODO: Написать тест -> Реализовать метод
-        Note note = notes.get(id);
-        if (note == null) return false;
-        note.setTitle(newTitle);
-        note.setText(newText);
-        return true; // Placeholder
+  /**
+   * Удаляет заметку по ID.
+   *
+   * @param id ID заметки.
+   * @return true, если заметка найдена и удалена, иначе false.
+   */
+  public boolean deleteNote(int id) {
+    Note note = notes.get(id);
+    if (note == null) {
+      return false;
     }
+    notes.remove(id);
+    return true;
+  }
 
-    /**
-     * Добавляет тег к существующей заметке.
-     * @param id ID заметки.
-     * @param tag Тег для добавления.
-     * @return true, если заметка найдена и тег добавлен, иначе false.
-     */
-    public boolean addTagToNote(int id, String tag) {
-        Note note = notes.get(id);
-        if (note == null) return false;
-        if (note.getTags().contains(tag.toLowerCase())) return false;
-        note.addTag(tag.toLowerCase());
-        return true;
+  /**
+   * Ищет заметки, содержащие текст (без учета регистра).
+   *
+   * @param query Текст для поиска.
+   * @return Список найденных заметок.
+   */
+  public List<Note> findNotesByText(String query) {
+    List<Note> notesList = new ArrayList<>();
+    query = query.toLowerCase();
+    for (Note note : notes.values()) {
+      if (note.getText().toLowerCase().contains(query)) {
+        notesList.add(note);
+      }
     }
+    return notesList; // Placeholder
+  }
 
-    /**
-     * Удаляет тег у существующей заметки.
-     * @param id ID заметки.
-     * @param tag Тег для удаления.
-     * @return true, если заметка найдена и тег удален, иначе false.
-     */
-    public boolean removeTagFromNote(int id, String tag) {
-        Note note = notes.get(id);
-        if (note == null) return false;
-        if (!note.getTags().contains(tag.toLowerCase())) return false;
-        note.removeTag(tag);
-        return true;
+  /**
+   * Ищет заметки, содержащие ВСЕ указанные теги (без учета регистра).
+   *
+   * @param searchTags Набор тегов для поиска.
+   * @return Список найденных заметок.
+   */
+  public List<Note> findNotesByTags(Set<String> searchTags) {
+    // TODO: Написать тест -> Реализовать метод
+    if (searchTags == null) {
+      return new ArrayList<>();
     }
+    List<Note> notesList = new ArrayList<>();
+    searchTags = searchTags.stream()
+        .map(String::toLowerCase)
+        .collect(Collectors.toSet());
+    for (Note note : notes.values()) {
+      if (searchTags.isEmpty() && note.getTags().isEmpty()) {
+        notesList.add(note);
+      } else if (note.getTags().containsAll(searchTags) && !searchTags.isEmpty()) {
+        notesList.add(note);
+      }
+    }
+    return notesList;
+  }
 
-    /**
-     * Удаляет заметку по ID.
-     * @param id ID заметки.
-     * @return true, если заметка найдена и удалена, иначе false.
-     */
-    public boolean deleteNote(int id) {
-        Note note = notes.get(id);
-        if (note == null) return false;
-        notes.remove(id);
-        return true;
+  /**
+   * Получает список всех уникальных тегов из всех заметок.
+   *
+   * @return Список уникальных тегов (в нижнем регистре).
+   */
+  public Set<String> getAllTags() {
+    Set<String> tags = new HashSet<>();
+    for (Note note : notes.values()) {
+      tags.addAll(note.getTags());
     }
-
-    /**
-     * Ищет заметки, содержащие текст (без учета регистра).
-     * @param query Текст для поиска.
-     * @return Список найденных заметок.
-     */
-    public List<Note> findNotesByText(String query) {
-        List<Note> notesList = new ArrayList<>();
-        query = query.toLowerCase();
-        for (Note note : notes.values()) {
-            if (note.getText().toLowerCase().contains(query)) {
-                notesList.add(note);
-            }
-        }
-        return notesList; // Placeholder
-    }
-
-    /**
-     * Ищет заметки, содержащие ВСЕ указанные теги (без учета регистра).
-     * @param searchTags Набор тегов для поиска.
-     * @return Список найденных заметок.
-     */
-    public List<Note> findNotesByTags(Set<String> searchTags) {
-        // TODO: Написать тест -> Реализовать метод
-        if (searchTags == null) return new ArrayList<>();
-        List<Note> notesList = new ArrayList<>();
-        searchTags = searchTags.stream()
-                .map(String::toLowerCase)
-                .collect(Collectors.toSet());
-        for (Note note : notes.values()) {
-            if (searchTags.isEmpty() && note.getTags().isEmpty()) notesList.add(note);
-            else
-            if (note.getTags().containsAll(searchTags) && !searchTags.isEmpty())
-                notesList.add(note);
-        }
-        return notesList;
-    }
-
-    /**
-     * Получает список всех уникальных тегов из всех заметок.
-     * @return Список уникальных тегов (в нижнем регистре).
-     */
-    public Set<String> getAllTags() {
-        Set<String> tags = new HashSet<>();
-        for (Note note : notes.values()) {
-            tags.addAll(note.getTags());
-        }
-        // Пройти по всем заметкам, собрать все теги в один Set.
-        return tags;
-    }
+    // Пройти по всем заметкам, собрать все теги в один Set.
+    return tags;
+  }
 
 }
