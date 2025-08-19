@@ -13,22 +13,9 @@ import java.util.stream.Collectors;
 
 public class NoteService {
 
-  // TODO: Выбрать коллекцию для хранения заметок (например, Map<Integer, Note>)
   private final Map<Integer, Note> notes = new HashMap<>();
 
-  // TODO: Добавить счетчик для генерации уникальных ID (AtomicInteger или просто int)
   private final AtomicInteger nextId = new AtomicInteger(1);
-
-  // TODO: (Опционально) Поле для хранения пути к файлу сохранения
-  // private final String storageFilePath;
-
-  // TODO: Реализовать конструктор
-  // Может принимать путь к файлу для загрузки (опционально)
-  public NoteService(/* String storageFilePath */) {
-    // this.storageFilePath = storageFilePath;
-    // TODO: (Опционально) Вызвать метод загрузки из файла, если путь указан
-    // loadFromFile();
-  }
 
   // --- МЕТОДЫ ДЛЯ РЕАЛИЗАЦИИ ЧЕРЕЗ TDD --- //
 
@@ -69,7 +56,7 @@ public class NoteService {
    * @return Неизменяемый список всех заметок.
    */
   public List<Note> getAllNotes() {
-    // TODO: Написать тест -> Реализовать метод
+
     List<Note> notesList = new ArrayList<>(notes.values());
     return Collections.unmodifiableList(notesList);
   }
@@ -83,7 +70,7 @@ public class NoteService {
    * @return true, если заметка найдена и обновлена, иначе false.
    */
   public boolean updateNoteText(int id, String newTitle, String newText) {
-    // TODO: Написать тест -> Реализовать метод
+
     Note note = notes.get(id);
     if (note == null) {
       return false;
@@ -170,7 +157,7 @@ public class NoteService {
    * @return Список найденных заметок.
    */
   public List<Note> findNotesByTags(Set<String> searchTags) {
-    // TODO: Написать тест -> Реализовать метод
+
     if (searchTags == null) {
       return new ArrayList<>();
     }
@@ -179,9 +166,10 @@ public class NoteService {
         .map(String::toLowerCase)
         .collect(Collectors.toSet());
     for (Note note : notes.values()) {
-      if (searchTags.isEmpty() && note.getTags().isEmpty()) {
-        notesList.add(note);
-      } else if (note.getTags().containsAll(searchTags) && !searchTags.isEmpty()) {
+      if (
+          (searchTags.isEmpty() && note.getTags().isEmpty()) ||
+              (note.getTags().containsAll(searchTags) && !searchTags.isEmpty())
+      ) {
         notesList.add(note);
       }
     }

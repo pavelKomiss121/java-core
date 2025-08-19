@@ -20,7 +20,6 @@ class NoteServiceTest {
   @BeforeEach
   void setUp() {
 
-    // TODO: Инициализировать noteService перед каждым тестом
     noteService = new NoteService();
   }
 
@@ -52,7 +51,7 @@ class NoteServiceTest {
       }
       assertThat(addedNote.getTags()).isEqualTo(tagsLowerCase);
 
-      assertThat(noteService.getAllNotes().size()).isEqualTo(1);
+      assertThat(noteService.getAllNotes()).hasSize(1);
       assertThat(noteService.getAllNotes().getFirst().getTitle()).isEqualTo(title);
 
       assertThat(noteService.getAllNotes().getFirst().getCreationDate()).isEqualTo(LocalDate.now());
@@ -61,11 +60,11 @@ class NoteServiceTest {
     @Test
     @DisplayName("Добавление заметки с null title/text")
     void shouldHandleNullTitleAndText() {
-      Note addedNote = noteService.addNote("Привет", null, null);
+      noteService.addNote("hi", null, null);
       assertThatThrownBy(() -> noteService.addNote(null, null, null))
           .isInstanceOf(IllegalArgumentException.class);
-      assertThat(noteService.getAllNotes().size()).isEqualTo(1);
-      assertThat(noteService.getAllNotes().getFirst().getText()).isEqualTo("");
+      assertThat(noteService.getAllNotes()).hasSize(1);
+      assertThat(noteService.getAllNotes().getFirst().getText()).isEmpty();
       assertThat(noteService.getAllNotes().getFirst().getTags()).isEqualTo(Set.of());
     }
   }
@@ -73,8 +72,7 @@ class NoteServiceTest {
   @Nested
   @DisplayName("Тесты получения заметок")
   class GetNoteTests {
-    // TODO: Написать тесты для getNoteById (успешный поиск, поиск несуществующей)
-    // TODO: Написать тесты для getAllNotes (пустой список, список с несколькими заметками)
+
 
     @Test
     @DisplayName("Успешное получение заметки по id")
@@ -119,9 +117,6 @@ class NoteServiceTest {
   @Nested
   @DisplayName("Тесты обновления заметок")
   class UpdateNoteTests {
-    // TODO: Написать тесты для updateNoteText (успешное обновление, попытка обновить несуществующую)
-    // TODO: Написать тесты для addTagToNote (добавление нового тега, добавление существующего, к несуществующей заметке)
-    // TODO: Написать тесты для removeTagFromNote (удаление существующего тега, попытка удалить несуществующий, у несуществующей заметки)
 
     @Test
     @DisplayName("Успешное обновление текста заметки")
@@ -136,7 +131,7 @@ class NoteServiceTest {
       assertThat(foundOpt.orElseThrow().getText()).isEqualTo("new text");
 
       n.setText(null);
-      assertThat(n.getText()).isEqualTo("");
+      assertThat(n.getText()).isEmpty();
     }
 
     @Test
@@ -233,7 +228,6 @@ class NoteServiceTest {
   @DisplayName("Тесты удаления заметок")
   class DeleteNoteTests {
 
-    // TODO: Написать тесты для deleteNote (успешное удаление, попытка удалить несуществующую)
     @Test
     @DisplayName("Успешное удаление заметки")
     void shouldDeleteNote() {
@@ -255,8 +249,6 @@ class NoteServiceTest {
   @Nested
   @DisplayName("Тесты поиска заметок")
   class FindNoteTests {
-    // TODO: Написать тесты для findNotesByText (поиск существующего текста, части текста, текста в разном регистре, несуществующего текста)
-    // TODO: Написать тесты для findNotesByTags (поиск по одному тегу, по нескольким существующим тегам, по существующим и несуществующим, только по несуществующим, с пустым набором тегов)
 
     @Test
     @DisplayName("findNotesByText: существующий текст")
@@ -368,7 +360,7 @@ class NoteServiceTest {
   @Nested
   @DisplayName("Тесты работы с тегами")
   class TagTests {
-    // TODO: Написать тесты для getAllTags (пустой список, список с уникальными тегами из нескольких заметок)
+
 
     @Test
     @DisplayName("getAllTags: пустой список")
@@ -398,8 +390,7 @@ class NoteServiceTest {
         Note a = new Note(1, "A", "textA");
         Note b = new Note(1, "B", "textB");
 
-        assertThat(a).isEqualTo(b);
-        assertThat(a.hashCode()).isEqualTo(b.hashCode());
+        assertThat(a).isEqualTo(b).hasSameHashCodeAs(b);
       }
 
       @Test
