@@ -6,10 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-// TODO: Сделать класс Serializable, если будешь использовать сериализацию для сохранения
 public class Note /* implements Serializable */ {
-  // TODO: Добавить serialVersionUID, если класс Serializable
-  // private static final long serialVersionUID = 1L;
 
   private final int id; // Уникальный ID
   private final LocalDate creationDate; // Дата создания
@@ -17,7 +14,6 @@ public class Note /* implements Serializable */ {
   private String text; // Текст заметки
   private Set<String> tags; // Набор тегов (уникальные строки)
 
-  // TODO: Реализовать конструктор:
 
   public Note(int id, String title, String text) {
     if (title == null) {
@@ -38,7 +34,6 @@ public class Note /* implements Serializable */ {
   // Инициализирует tags пустым HashSet.
   // Проверяет title и text на null (можно бросать IllegalArgumentException или использовать значение по умолчанию).
 
-  // TODO: Реализовать геттеры для всех полей (id, title, text, creationDate, tags)
   // Для tags возвращать неизменяемую копию: Collections.unmodifiableSet(tags)
 
   public int getId() {
@@ -67,7 +62,6 @@ public class Note /* implements Serializable */ {
     this.text = text;
   }
 
-  // TODO: Реализовать сеттеры для title и text
   // Тоже с проверкой на null.
 
   public LocalDate getCreationDate() {
@@ -78,7 +72,6 @@ public class Note /* implements Serializable */ {
     return Collections.unmodifiableSet(tags);
   }
 
-  // TODO: Реализовать метод addTag(String tag)
   // Добавляет тег в множество tags.
   // Тег должен быть не null и не пустым. Привести к нижнему регистру перед добавлением.
   public void addTag(String tag) {
@@ -88,13 +81,11 @@ public class Note /* implements Serializable */ {
     tags.add(tag.toLowerCase());
   }
 
-  // TODO: Реализовать метод removeTag(String tag)
   // Удаляет тег из множества (сравнение без учета регистра).
   public boolean removeTag(String tag) {
     return tags.remove(tag.toLowerCase());
   }
 
-  // TODO: Переопределить equals и hashCode на основе поля id
   @Override
   public boolean equals(Object o) {
     if (this == o) {
