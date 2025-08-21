@@ -29,7 +29,7 @@ class SettingsManagerTest {
     testFilePath = tempDir.resolve("test_settings.ser");
 
     testServerConfig = new ServerConfiguration("test.server", 1234, true);
-    testServerConfig.setLastStatus("Initial"); // Установим transient поле
+    testServerConfig.setLastStatus("Initial");
     testWindowConfig = new WindowConfiguration("Test Window", 800, 600);
 
     testSettingsList = new ArrayList<>();
@@ -40,13 +40,10 @@ class SettingsManagerTest {
   @Test
   @DisplayName("Должен сохранять и загружать список с разными типами Serializable")
   void shouldSaveAndLoadListOfMixedSerializable() throws IOException, ClassNotFoundException {
-    // Given (в BeforeEach)
 
-    // When
     SettingsManager.saveSettings(testSettingsList, testFilePath.toString());
     List<Serializable> loadedList = SettingsManager.loadSettings(testFilePath.toString());
 
-    // Then
     assertThat(loadedList).isNotNull().hasSize(2);
 
     ServerConfiguration loadedServer = (ServerConfiguration) loadedList.getFirst();
@@ -54,7 +51,7 @@ class SettingsManagerTest {
     assertThat(loadedServer.getServerAddress()).isEqualTo(testServerConfig.getServerAddress());
     assertThat(loadedServer.getServerPort()).isEqualTo(testServerConfig.getServerPort());
     assertThat(loadedServer.isLoggingEnabled()).isEqualTo(testServerConfig.isLoggingEnabled());
-    assertThat(loadedServer.getLastStatus()).isNull(); // transient не сохраняется
+    assertThat(loadedServer.getLastStatus()).isNull();
 
     WindowConfiguration loadedWindow = (WindowConfiguration) loadedList.get(1);
     assertThat(loadedWindow).isInstanceOf(WindowConfiguration.class);
@@ -66,7 +63,7 @@ class SettingsManagerTest {
   @Test
   @DisplayName("Должен сохранять и загружать пустой список")
   void shouldSaveAndLoadEmptyList() throws IOException, ClassNotFoundException {
-    // Given
+
     List<Serializable> emptyList = new ArrayList<>();
 
     SettingsManager.saveSettings(emptyList, testFilePath.toString());
@@ -79,17 +76,15 @@ class SettingsManagerTest {
   @Test
   @DisplayName("loadSettings должен возвращать пустой список, если файл не найден")
   void loadShouldReturnEmptyListWhenFileNotExists() {
-    // Given: Файл не существует
+
     assertThat(testFilePath).doesNotExist();
     List<Serializable> loadedList = SettingsManager.loadSettings(testFilePath.toString());
     assertThat(loadedList).isNotNull().isEmpty();
   }
 
-  // Тест на ClassCastException или другие проблемы при чтении некорректного файла
   @Test
   @DisplayName("loadSettings должен возвращать пустой список при ошибке десериализации")
   void loadShouldReturnEmptyListOnDeserializationError() throws IOException {
-    // Given: Создать файл с некорректными данными (не список Serializable)
     Files.writeString(testFilePath, "Это не сериализованный список");
     List<Serializable> loadedList = SettingsManager.loadSettings(testFilePath.toString());
     assertThat(loadedList).isNotNull().isEmpty();
