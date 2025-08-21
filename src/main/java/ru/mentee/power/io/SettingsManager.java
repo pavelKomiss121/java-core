@@ -15,16 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// Обычный класс конфигурации сервера
 class ServerConfiguration implements Serializable {
 
   @Serial
-  private static final long serialVersionUID = 301L; // Пример UID
+  private static final long serialVersionUID = 301L;
 
   private String serverAddress;
   private int serverPort;
   private boolean loggingEnabled;
-  private transient String lastStatus = "Idle"; // Не сохраняем
+  private transient String lastStatus = "Idle";
 
   public ServerConfiguration(String serverAddress, int serverPort, boolean loggingEnabled) {
     this.serverAddress = serverAddress;
@@ -80,12 +79,11 @@ class ServerConfiguration implements Serializable {
   }
 }
 
-// Record конфигурации окна (автоматически Serializable)
 record WindowConfiguration(String windowTitle, int width, int height) implements Serializable {
 
   @Serial
-  private static final long serialVersionUID = 302L; // Пример UID
-  // Конструктор, геттеры, equals, hashCode, toString - сгенерированы
+  private static final long serialVersionUID = 302L;
+
 
 }
 
@@ -116,9 +114,9 @@ public class SettingsManager {
    * @param filename Имя файла.
    * @return Загруженный список Serializable объектов или пустой список в случае ошибки.
    */
-  @SuppressWarnings("unchecked") // Подавляем предупреждение для приведения типа
+  @SuppressWarnings("unchecked")
   public static List<Serializable> loadSettings(String filename) {
-    List<Serializable> loadedSettings = new ArrayList<>(); // Возвращаем пустой список по умолчанию
+    List<Serializable> loadedSettings = new ArrayList<>();
     File file = new File(filename);
     if (!file.exists()) {
       System.out.println("Файл настроек " + filename + " не найден.");
@@ -133,12 +131,10 @@ public class SettingsManager {
 
       System.out.println("Список настроек загружен из " + filename);
     } catch (FileNotFoundException e) {
-      // Эта ветка не должна сработать из-за проверки file.exists(), но оставим для полноты
       System.err.println("Файл настроек не найден (внутренняя ошибка?): " + filename);
     } catch (IOException | ClassNotFoundException |
-             ClassCastException e) { // Мульти-catch + ClassCastException
+             ClassCastException e) {
       System.err.println("Ошибка при загрузке настроек: " + e.getMessage());
-      // В случае ошибки возвращаем пустой список
       loadedSettings.clear();
     }
     return loadedSettings;
@@ -147,34 +143,29 @@ public class SettingsManager {
   public static void main(String[] args) {
     String filename = "settings.ser";
 
-    // 1. Создать список с разными типами конфигураций
     List<Serializable> currentSettings = new ArrayList<>();
     currentSettings.add(new ServerConfiguration("prod.server.com", 443, true));
     currentSettings.add(new WindowConfiguration("Основное Окно Приложения", 1280, 720));
 
-    // Демонстрация transient поля
     if (!currentSettings.isEmpty() && currentSettings.get(0) instanceof ServerConfiguration) {
       ((ServerConfiguration) currentSettings.get(0)).setLastStatus("Перед сохранением");
     }
     System.out.println("Сохраняем список: " + currentSettings);
 
-    // 2. Сохранить список
     saveSettings(currentSettings, filename);
 
-    // 3. Загрузить список
     System.out.println("\nЗагружаем список...");
     List<Serializable> loadedSettings = loadSettings(filename);
 
-    // 4. Вывести результат и проверить типы/данные
     if (loadedSettings.isEmpty()) {
       System.out.println("Не удалось загрузить настройки.");
     } else {
       System.out.println("Загруженный список: " + loadedSettings);
       System.out.println("--- Проверка объектов в списке ---");
       for (Serializable setting : loadedSettings) {
-        if (setting instanceof ServerConfiguration configClass) { // Pattern matching for instanceof (Java 16+)
+        if (setting instanceof ServerConfiguration configClass) {
           System.out.println("  Загружен Server Config: server=" + configClass.getServerAddress() +
-              ", status=" + configClass.getLastStatus()); // Статус должен быть null или Idle
+              ", status=" + configClass.getLastStatus());
         } else if (setting instanceof WindowConfiguration configRecord) {
           System.out.println("  Загружен Window Config: title=" + configRecord.windowTitle() +
               ", size=" + configRecord.width() + "x" + configRecord.height());
