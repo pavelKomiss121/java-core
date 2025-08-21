@@ -18,27 +18,25 @@ import org.junit.jupiter.api.io.TempDir;
 class FileCopyDemoTest {
 
   @TempDir
-  Path tempDir; // Временная директория
-
+  Path tempDir;
+  Path distinationPath;
   Path sourcePath;
-  Path destinationPath;
+  private static final String SOURCE_FILE_NAME = "source_test.txt";
+  private static final String DEST_FILE_NAME = "dest_test.txt";
   String sourceContent = "Строка 1 для копирования.\\nLine 2 with English.\\nИ русские буквы.";
 
   @BeforeEach
   void setUp() throws IOException {
-    // Готовим пути внутри временной директории
-    sourcePath = tempDir.resolve("source_test.txt");
-    destinationPath = tempDir.resolve("dest_test.txt");
-    // Создаем исходный файл для большинства тестов
+    sourcePath = tempDir.resolve(SOURCE_FILE_NAME);
+    distinationPath = tempDir.resolve(DEST_FILE_NAME);
     Files.writeString(sourcePath, sourceContent, StandardCharsets.UTF_8);
-    assertThat(sourcePath).exists(); // Проверка предусловия
+    assertThat(sourcePath).exists();
   }
 
-  // Вспомогательный метод для выполнения логики копирования
   private void performCopy(Path source, Path dest) throws IOException {
     try (FileInputStream fis = new FileInputStream(source.toFile());
         FileOutputStream fos = new FileOutputStream(dest.toFile())) {
-      byte[] buffer = new byte[1024]; // Используем буфер как в задании
+      byte[] buffer = new byte[1024];
       int bytesRead;
       while ((bytesRead = fis.read(buffer)) != -1) {
         fos.write(buffer, 0, bytesRead);
@@ -49,15 +47,13 @@ class FileCopyDemoTest {
   @Test
   @DisplayName("Должен успешно копировать непустой файл")
   void shouldCopyNonEmptyFile() throws IOException {
-    // Given: Файл создан в setUp
-    assertThat(destinationPath).doesNotExist();
 
-    // When: Выполняем копирование
-    performCopy(sourcePath, destinationPath);
+    assertThat(distinationPath).doesNotExist();
 
-    // Then: Проверяем результат
-    assertThat(destinationPath).exists();
-    String text = Files.readString(destinationPath, StandardCharsets.UTF_8);
+    performCopy(sourcePath, distinationPath);
+
+    assertThat(distinationPath).exists();
+    String text = Files.readString(distinationPath, StandardCharsets.UTF_8);
     assertThat(text).isEqualTo(sourceContent);
 
   }
@@ -65,18 +61,16 @@ class FileCopyDemoTest {
   @Test
   @DisplayName("Должен успешно копировать пустой файл")
   void shouldCopyEmptyFile() throws IOException {
-    // Given: Создаем пустой исходный файл (перезаписываем созданный в setUp)
+
     Path emptySource = tempDir.resolve("empty_source.txt");
-    Files.deleteIfExists(emptySource); // На случай повторного запуска
+    Files.deleteIfExists(emptySource);
     Files.createFile(emptySource);
     assertThat(emptySource).isEmptyFile();
     Path emptyDest = tempDir.resolve("empty_dest.txt");
     assertThat(emptyDest).doesNotExist();
 
-    // When: Копируем пустой файл
     performCopy(emptySource, emptyDest);
 
-    // Then: Проверяем результат
     assertThat(emptyDest).exists().isEmptyFile();
 
   }
@@ -84,16 +78,14 @@ class FileCopyDemoTest {
   @Test
   @DisplayName("Должен перезаписать существующий целевой файл")
   void shouldOverwriteExistingDestinationFile() throws IOException {
-    // Given: Целевой файл уже существует с другим содержимым
+
     String initialDestContent = "Этот текст будет перезаписан.";
-    Files.writeString(destinationPath, initialDestContent, StandardCharsets.UTF_8);
-    assertThat(destinationPath).hasContent(initialDestContent);
+    Files.writeString(distinationPath, initialDestContent, StandardCharsets.UTF_8);
+    assertThat(distinationPath).hasContent(initialDestContent);
 
-    // When: Выполняем копирование
-    performCopy(sourcePath, destinationPath);
+    performCopy(sourcePath, distinationPath);
 
-    // Then: Проверяем, что целевой файл перезаписан
-    assertThat(destinationPath).exists().hasContent(sourceContent);
+    assertThat(distinationPath).exists().hasContent(sourceContent);
 
   }
 
@@ -101,14 +93,13 @@ class FileCopyDemoTest {
   @Test
   @DisplayName("Должен выбросить IOException, если исходный файл не существует")
   void shouldThrowIOExceptionIfSourceDoesNotExist() {
-    // Given: Исходный файл не существует
+
     Path nonExistentSource = tempDir.resolve("non_existent.txt");
     assertThat(nonExistentSource).doesNotExist();
 
-    // When: Пытаемся выполнить копирование
-    Throwable thrown = catchThrowable(() -> performCopy(nonExistentSource, destinationPath));
+    Throwable thrown = catchThrowable(() -> performCopy(nonExistentSource, distinationPath));
 
     assertThat(thrown).isInstanceOf(IOException.class);
-    assertThat(destinationPath).doesNotExist();
+    assertThat(distinationPath).doesNotExist();
   }
 }
